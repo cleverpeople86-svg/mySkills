@@ -3,6 +3,10 @@
   "version": "1.3.3",
   "private": false,
   "description": "Shared skill definitions bundle for My Skills.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
   "files": [
     "Defect-Risk-Analyzer",
     "Requirement-Summarizer",
