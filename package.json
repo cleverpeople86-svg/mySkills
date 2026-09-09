@@ -1,6 +1,6 @@
 {
   "name": "my-skills-server",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": false,
   "description": "Node.js server for hosting local SKILL.md definitions.",
   "type": "module",
