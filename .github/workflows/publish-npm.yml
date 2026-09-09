@@ -25,6 +25,26 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Verify package does not depend on itself
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const pkg = require('./package.json');
+          const sections = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+          const offenders = sections.flatMap((section) => {
+            const list = pkg[section] ?? {};
+            return Object.keys(list).filter((name) => name === pkg.name).map((name) => `${section}.${name}`);
+          });
+
+          if (offenders.length > 0) {
+            console.error('Self-dependency found in package.json:', offenders.join(', '));
+            process.exit(1);
+          }
+
+          console.log('Self-dependency check passed.');
+          NODE
+
       - name: Bump version if the current package version already exists on npm
         id: bump
         shell: bash
