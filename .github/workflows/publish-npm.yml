@@ -29,13 +29,14 @@ jobs:
         id: bump
         shell: bash
         run: |
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          PACKAGE_NAME=$(node -e "console.log(require('./package.json').name)")
+          CURRENT_VERSION=$(node -e "console.log(require('./package.json').version)")
 
           if npm view "$PACKAGE_NAME@$CURRENT_VERSION" version >/dev/null 2>&1; then
             npm version patch --no-git-tag-version
             echo "version_bumped=true" >> "$GITHUB_OUTPUT"
-            echo "Current version already exists on npm. Bumped package version to $(node -p \"require('./package.json').version\")"
+            NEW_VERSION=$(node -e "console.log(require('./package.json').version)")
+            echo "Current version already exists on npm. Bumped package version to $NEW_VERSION"
           else
             echo "version_bumped=false" >> "$GITHUB_OUTPUT"
             echo "Current version does not exist on npm, publishing as-is."
