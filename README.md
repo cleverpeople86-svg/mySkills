@@ -27,6 +27,24 @@ For development, use Node's built-in watch mode:
 npm run dev
 ```
 
+## Publish to npm
+
+This workspace is already set up to publish as a public npm package. To publish a new version, create a tag like `v1.0.1` and push it, or run the workflow manually from GitHub Actions.
+
+1. Update `package.json` version.
+2. Commit and push your changes.
+3. Create and push a version tag, for example:
+
+```powershell
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+4. Add an `NPM_TOKEN` repository secret in GitHub.
+5. Run the publish workflow in GitHub Actions.
+
+The included workflow file is `.github/workflows/publish-npm.yml`.
+
 ## API
 
 - `GET /health` - server health check

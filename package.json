@@ -1,10 +1,21 @@
 {
   "name": "my-skills-server",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "description": "Node.js server for hosting local SKILL.md definitions.",
   "type": "module",
   "main": "server.js",
+  "files": [
+    "server.js",
+    "src",
+    "Defect-Risk-Analyzer",
+    "Requirement-Summarizer",
+    "Test-Case-Generator",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
