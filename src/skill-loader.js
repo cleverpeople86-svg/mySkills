@@ -2,6 +2,11 @@ import { access, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const skillFileName = 'SKILL.md';
+const skillOrder = new Map([
+  ['Requirement-Summarizer', 0],
+  ['Test-Case-Generator', 1],
+  ['Defect-Risk-Analyzer', 2]
+]);
 
 function toSkillName(directoryName) {
   return directoryName
@@ -46,5 +51,14 @@ export async function loadSkills(skillsRoot) {
     };
   }));
 
-  return skills.sort((left, right) => left.id.localeCompare(right.id));
+  return skills.sort((left, right) => {
+    const leftOrder = skillOrder.get(left.directory) ?? Number.MAX_SAFE_INTEGER;
+    const rightOrder = skillOrder.get(right.directory) ?? Number.MAX_SAFE_INTEGER;
+
+    if (leftOrder !== rightOrder) {
+      return leftOrder - rightOrder;
+    }
+
+    return left.id.localeCompare(right.id);
+  });
 }

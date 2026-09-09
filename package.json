@@ -8,9 +8,9 @@
     "test": "node --test"
   },
   "files": [
-    "Defect-Risk-Analyzer",
     "Requirement-Summarizer",
     "Test-Case-Generator",
+    "Defect-Risk-Analyzer",
     "README.md"
   ],
   "publishConfig": {

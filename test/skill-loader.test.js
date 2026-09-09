@@ -13,7 +13,7 @@ test('loads only directories containing SKILL.md', async () => {
 
   assert.deepEqual(
     skills.map(({ id }) => id),
-    ['DefectRiskAnalyzer', 'RequirementSummarizer', 'TestCaseGenerator']
+    ['RequirementSummarizer', 'TestCaseGenerator', 'DefectRiskAnalyzer']
   );
   assert.ok(skills.every(({ content }) => content.includes('## Description')));
 });
