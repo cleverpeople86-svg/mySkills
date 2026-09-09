@@ -33,7 +33,7 @@ This workspace is already set up to publish as a public npm package. To publish 
 
 1. Update `package.json` version.
 2. Commit and push your changes.
-3. Enable npm trusted publishing for this GitHub repository on npmjs.com.
+3. Add a GitHub repository secret named `NPM_TOKEN` with a valid npm publish token.
 4. Create and push a version tag, for example:
 
 ```powershell
@@ -45,7 +45,7 @@ git push origin v1.0.1
 
 The included workflow file is `.github/workflows/publish-npm.yml`.
 
-> This workflow uses npm trusted publishing with OIDC instead of a long-lived `NPM_TOKEN` secret.
+> This workflow uses the `NPM_TOKEN` secret to publish automatically to npm.
 
 ## API
 
