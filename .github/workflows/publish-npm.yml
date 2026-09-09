@@ -1,17 +1,13 @@
 name: Publish to npm
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      id-token: write
+      contents: write
 
     steps:
       - name: Check out repository
@@ -29,16 +25,31 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Check package version
+      - name: Bump version if the current package version already exists on npm
+        id: bump
+        shell: bash
         run: |
-          VERSION=$(node -p "require('./package.json').version")
           PACKAGE_NAME=$(node -p "require('./package.json').name")
-          echo "Current package version: $VERSION"
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
 
-          if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
-            echo "Version $VERSION already exists on npm. Bump package.json version and push a new tag to publish a new release."
-            exit 1
+          if npm view "$PACKAGE_NAME@$CURRENT_VERSION" version >/dev/null 2>&1; then
+            npm version patch --no-git-tag-version
+            echo "version_bumped=true" >> "$GITHUB_OUTPUT"
+            echo "Current version already exists on npm. Bumped package version to $(node -p \"require('./package.json').version\")"
+          else
+            echo "version_bumped=false" >> "$GITHUB_OUTPUT"
+            echo "Current version does not exist on npm, publishing as-is."
           fi
+
+      - name: Commit version bump if needed
+        if: steps.bump.outputs.version_bumped == 'true'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "chore: bump package version"
+          git push origin HEAD:${GITHUB_REF_NAME}
 
       - name: Publish package
         run: npm publish --access public
